@@ -1,16 +1,32 @@
-# This is a sample Python script.
+# ----------------------------------------------------------
+# KNN Classifier Tests -------------------------------------
+# ----------------------------------------------------------
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import requests
+from typing import List,Dict
+from collections import defaultdict
+from Utils import LinearAlgebraUtils
+import csv
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def parse_dataset_rows(row: List[str]) -> LinearAlgebraUtils.LabeledPoint:
+    features = [float(value) for value in row[:-1]]
+    label = row[-1].split("-")[-1]
+    return LinearAlgebraUtils.LabeledPoint(features, label)
+
+# Downloading the iris flowers dataset
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+# data_set = requests.get("http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data")
+# with open('iris.dat','w') as file:
+#     file.write(data_set.text)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+with open("DataSets/iris.dat") as dataset_file :
+    reader = csv.reader(dataset_file)
+    iris_data = [parse_dataset_rows(row) for row in reader]
+
+points_by_species: Dict[str,List[float]] = defaultdict(list)
+for element in iris_data:
+    points_by_species[element.label].append(element.point)
+
+print(points_by_species)
