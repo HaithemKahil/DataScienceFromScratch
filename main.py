@@ -3,11 +3,14 @@
 # ----------------------------------------------------------
 
 import requests
-from typing import List,Dict
+from typing import List,Dict, Tuple
 from collections import defaultdict
 from Utils import LinearAlgebraUtils
 import csv
 from matplotlib import pyplot as plt
+import random
+from KNNChapter import KNNClassifier
+
 
 def parse_dataset_rows(row: List[str]) -> LinearAlgebraUtils.LabeledPoint:
     features = [float(value) for value in row[:-1]]
@@ -51,3 +54,26 @@ for row in range(2):
 
 ax[-1][-1].legend(loc = 'lower right', prop = {'size':6})
 plt.show()
+
+# Splitting Data to training and testing datasets
+
+random.seed(10)
+random.shuffle(iris_data)
+cut_point = int(0.7 * len(iris_data))
+iris_train, iris_test = iris_data[:cut_point],iris_data[cut_point:]
+
+# KNN Classification and calculating number of correct classified points
+
+confusion_matrix : Dict[Tuple[str,str], int] = defaultdict(int)
+correctly_classified = 0
+
+for element in iris_test:
+    predicted_class = KNNClassifier.classify(5,iris_train,element)
+    actual = element.label
+    if predicted_class == actual :
+        correctly_classified += 1
+
+    confusion_matrix[(predicted_class, actual)] += 1
+
+pct_correct = correctly_classified / len(iris_test)
+print(pct_correct,confusion_matrix)

@@ -7,7 +7,7 @@ class LinearAlgebraUtils:
         point: List[float]
         label: str
 
-    def distace(self,lp_one,lp_two:LabeledPoint):
+    def distace(lp_one,lp_two:LabeledPoint):
         result = 0
         sum_squared_vector = sum([(x - y)**2 for x,y in zip(lp_one.point,lp_two.point)])
         return math.sqrt(sum_squared_vector)
