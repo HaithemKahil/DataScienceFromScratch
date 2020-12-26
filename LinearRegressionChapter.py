@@ -3,7 +3,7 @@ import numpy as np
 
 class LeastSquaresRegressor:
 
-    def estimate( x_values, y_values):
+    def fit( x_values, y_values):
         covariance = np.cov(x_values, y_values)[0, 1]
         x_variance = np.var(x_values)
         x_mean = sum(x_values) / len(x_values)
